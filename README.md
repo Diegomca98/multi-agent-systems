@@ -1,4 +1,4 @@
-# Multi-Agent Systems
+# Multi-Agent Systems - V1.1
 
 > Github Repo: [aia-lab-mx-finance-multiagent](https://github.com/GenerativeAIHubSPAI/aia-lab-mx-finance-multiagent)
 
@@ -43,20 +43,19 @@ aia-lab-mx-finance-multiagent
     └── requirements.txt
 ```
 
-## Next Steps
-1. **Features**
-    * Improve capabilities: Multiple company comparison
-    * Implementation of different information sources.
-    * Visual Aids like Charts, Images, etc.
-2. **Error Handling**
-    * ~~User Errors~~
-    * ~~System Errors~~
-        * ~~Tech limitations~~
-        * ~~Hallucionation Reduction through prompting and algorithms~~
-3. **Infrastructure Design & Development**
-    * ~~Containerization using Docker~~
-    * ~~User Interface Design and Development~~
-4. **Logging Filtering & Segmentation**
+## Improvements
+* **Error Handling**
+    * User Errors.
+    * System Errors:
+        * Tech limitations.
+        * Hallucionation Reduction through prompting and algorithms.
+* **Infrastructure & Environment Control**
+    * Containerization using Docker.
+* **UX/UI**
+    * User interface Design and Development.
+* **Logging & Monitoring**
+    * Logging Capabilities.
+    * Utils for **time execution** and **token consumption** calculations.
 
 ## Run the Project
 

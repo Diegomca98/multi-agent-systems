@@ -1,16 +1,10 @@
 from openai import AzureOpenAI
-import streamlit as st
-import os
-import time
-from datetime import datetime
-from pathlib import Path
-from markdown_pdf import MarkdownPdf
-from markdown_pdf import Section
+
 from process.agents import AgentFactory
 from process.api_call import FinancialModelingPrepAPI
 from process.llm_router import LLMRouter
 from process.api_response_preprocessing import PreprocessResponse
-from .utils import metrics_data
+from .utils import print_metrics
 from process.logger import Logger
 
 logger = Logger()
@@ -31,9 +25,8 @@ class MultiAgentSystem:
             module_name = "MultiAgentSystem.__init__"
         )
 
-    def process_request(self, user_input, st_status):
+    def process_request(self, user_input):
         # Route agents
-        st.write("Creating the necessary agents...")
         routing_result = self.llm_router.defining_agents(user_input, "define_agents")
 
         if "Error" in routing_result:
@@ -48,16 +41,13 @@ class MultiAgentSystem:
             module_name = "MultiAgentSystem.process_request"
         )
         selected_agents = routing_result["agentes"]
-        st.write(f"└── Agents Created... {selected_agents}")
-
-        st.write("Fetching and Preprocessing Data...")
         # Fetch API data
         endpoints = self.get_endpoints_for_agents(selected_agents)
         # Data needed to make an API call
         company_name = routing_result["empresa"]
         ticker = routing_result["ticker"]
         exchange = routing_result["exchange"]
-        limit = 100
+        limit = 365
         _from = "2023-12-04"
         to = "2024-12-04"
         query = ""
@@ -68,34 +58,28 @@ class MultiAgentSystem:
         """
         Send user_input, selected_agents, api_respones, 
         """
-        ##Dinamic Cleanup##
-        # to_preprocess = self.preprocess.clean_api_response(
-        #     agents = selected_agents,
-        #     api_responses = api_responses
-        # )
-        # unnecesary_keys = self.preprocess.llm_preprocess(
-        #     key_cleanup = to_preprocess,
-        #     llm_router = self.llm_router
-        # )
 
-        # data_final = self.preprocess.json_key_cleanup(
-        #     keys_to_discard = unnecesary_keys,
-        #     api_responses = api_responses
-        # )
-        ##Static Cleanup##
-        data_final = self.preprocess.remove_unnecesary_keys(api_responses, selected_agents)
+        to_preprocess = self.preprocess.clean_api_response(
+            agents = selected_agents,
+            api_responses = api_responses
+        )
+        unnecesary_keys = self.preprocess.llm_preprocess(
+            key_cleanup = to_preprocess,
+            llm_router = self.llm_router
+        )
 
-        st.write("└── Data Preprocessed...")
-
+        data_final = self.preprocess.json_key_cleanup(
+            keys_to_discard = unnecesary_keys,
+            api_responses = api_responses
+        )
+    
         agent_factory = AgentFactory()
         agents = []
         tasks = []
         times = []
         token = []
 
-        st.write("Sending data to each agent...")
         if selected_agents:
-            agents_qty = len(selected_agents)
             for agent_name in selected_agents:
                 AgentClass = agent_factory.get_agent_class(agent_name)
                 if AgentClass:
@@ -108,15 +92,15 @@ class MultiAgentSystem:
             qa_agent, qa_task = agent_factory.create_qa_agent(selected_agents, tasks)
             agents.append(qa_agent)
             tasks.append(qa_task)
+            
+            summary_agent, summary_task = agent_factory.SummarizeAgent(tasks, routing_result["empresa"])
+            agents.append(summary_agent)
+            tasks.append(summary_task)
+            summary_crew, times, token, outputs = agent_factory.create_crew(agents, tasks)
+            final_result = summary_crew.kickoff()
 
-            st.write("└── Data Sent...")
-            st.write("The data is beign analyzed, you'll see a response soon...")
-
-            result_crew, times, token, outputs = agent_factory.create_crew(agents, tasks, st_status=st_status, agents_qty = agents_qty)
-            final_result = result_crew.kickoff()
-
-            executions = list(selected_agents) + ["QA Agent"]
-            metrics_data(times, token, outputs, executions, result_crew)
+            executions = list(selected_agents) + ["QA Agent", "Summarize Agent"]
+            print_metrics(times, token, outputs, executions, summary_crew)
             
             return final_result
 
