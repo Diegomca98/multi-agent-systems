@@ -103,3 +103,33 @@ class PreprocessResponse:
 
         return api_responses
         
+    def remove_unnecesary_keys(self, api_responses, selected_agents):
+        to_clean = {
+        "Financial" : {
+            "income-statement" : ['cik', 'fillingDate', 'acceptedDate', 'calendarYear', 'finalLink', 'link'],
+            "cash-flow-statement" : ['cik', 'fillingDate', 'acceptedDate', 'link', 'finalLink', 'calendarYear'],
+            "balance-sheet-statement" : ['cik','fillingDate','acceptedDate','calendarYear','period','link','finalLink','minorityInterest','othertotalStockholdersEquity','totalLiabilitiesAndTotalEquity','otherAssets']
+            },
+        "Accounting" : {
+            "cash-flow-statement-growth": ['symbol', 'calendarYear', 'period'],
+            "balance-sheet-statement-growth" : ['symbol', 'date', 'calendarYear', 'period', 'growthGoodwill', 'growthIntangibleAssets', 'growthGoodwillAndIntangibleAssets', 'growthDeferredRevenueNonCurrent', 'growthDeferrredTaxLiabilitiesNonCurrent', 'growthOthertotalStockholdersEquity'],
+            "income-statement-growth" : [ 'symbol', 'calendarYear', 'period']
+            },
+        "Legal" : {
+            "profile" : ['price', 'beta', 'volAvg', 'lastDiv', 'range', 'changes', 'website', 'image', 'fullTimeEmployees', 'phone', 'address', 'city', 'state', 'zip', 'dcfDiff', 'dcf', 'defaultImage', 'isEtf', 'isActivelyTrading', 'isAdr', 'isFund', 'description', 'ceo', 'ipoDate']
+            },
+        "Risk" : {
+            "rating" : ['symbol', 'date'],
+            "financial-growth" : ['calendarYear', 'period','symbol', 'date']
+            }
+        }
+        for agent in selected_agents:
+            try:
+                for endpoint in to_clean[agent]:
+                    for key in to_clean[agent][endpoint]:
+                        for api_list in range(len(api_responses[endpoint])):
+                            del api_responses[endpoint][api_list][key]
+            except KeyError:
+                pass
+
+        return api_responses

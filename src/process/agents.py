@@ -79,6 +79,15 @@ class AgentFactory:
                 You are an agent specialized in financial analysis. 
                 Your role is to provide accurate and relevant information about the financial data presented to you. 
                 You must act as a financial expert, able to interpret and analyze complex data to offer valuable insights.
+                Also you are an expert who creates perfectly formatted Markdown reports. 
+                Specializes in consistent number formatting and maintains readability 
+                by treating numbers and their units as single, inseparable elements.
+                    CRITICAL: You must format ALL output in pure Markdown only:
+                    - Use # for main headers
+                    - Use ## for subheaders 
+                    - Use ** for bold numbers and metrics
+                    - NEVER use LaTeX formatting
+                    - NEVER use $ symbols for formatting           
             """,
             llm = self.conf,
             allow_delegation = self.allow_delegation,
@@ -93,12 +102,27 @@ class AgentFactory:
                 income-statement:{data['income-statement']},
                 cash-flow-statement:{data['cash-flow-statement']},
                 balance-sheet-statement:{data['balance-sheet-statement']}
+                Avoid the creation of any Latex format, just focus in
+                create a Markdown report for {company}
+                OUTPUT FORMAT REQUIREMENTS:
+                    1. Use ONLY Markdown syntax
+                    2. Format numbers like: **50 million**, **25%**, **1.2 billion**
+                    3. NEVER use LaTeX or $ symbols
+                    4. Use headers: # for titles, ## for sections
+                    5. Use bullet points with -
             """,
             expected_output = """
                 Based on the analysis of the information provided, 
                 you must offer a concise and decisive answer that helps the user make an informed decision. 
                 Make sure your answer is clear, direct and based on the data analyzed, 
                 highlighting the key points that the user should consider for their financial strategy.
+                Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
+                Provide a clear Markdown report with:
+                    - Proper headers (#, ##)
+                    - Bold numbers (**number**)
+                    - NO LaTeX formatting
+                    - NO $ symbols
+                    - Clean bullet points
             """,
             agent = financial_agent
         )
@@ -116,6 +140,15 @@ class AgentFactory:
                 Your role is to identify, analyze and evaluate potential risks associated with financial decisions. 
                 You act as a risk mitigation advisor, 
                 providing critical information to help minimize uncertainties and maximize financial security.
+                Also you are an expert who creates perfectly formatted Markdown reports. 
+                Specializes in consistent number formatting and maintains readability 
+                by treating numbers and their units as single, inseparable elements.
+                    CRITICAL: You must format ALL output in pure Markdown only:
+                    - Use # for main headers
+                    - Use ## for subheaders 
+                    - Use ** for bold numbers and metrics
+                    - NEVER use LaTeX formatting
+                    - NEVER use $ symbols for formatting     
             """,
             llm = self.conf,
             allow_delegation = self.allow_delegation,
@@ -128,12 +161,27 @@ class AgentFactory:
                 Evaluate financial risks data from this company: {company}:
                 rating:{data['rating']},
                 financial-growth:{data['financial-growth']}
+                Avoid the creation of any Latex format, just focus in
+                create a Markdown report for {company}
+                OUTPUT FORMAT REQUIREMENTS:
+                    1. Use ONLY Markdown syntax
+                    2. Format numbers like: **50 million**, **25%**, **1.2 billion**
+                    3. NEVER use LaTeX or $ symbols
+                    4. Use headers: # for titles, ## for sections
+                    5. Use bullet points with -
             """,
             expected_output = """
                 Based on the analysis of the information provided, 
                 you must offer a clear and concise response that identifies the key risks and suggests strategies to mitigate them. 
                 Make sure your response is direct and based on the data analyzed, 
                 providing practical recommendations to manage the identified risks.
+                Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
+                Provide a clear Markdown report with:
+                    - Proper headers (#, ##)
+                    - Bold numbers (**number**)
+                    - NO LaTeX formatting
+                    - NO $ symbols
+                    - Clean bullet points
             """,
             agent = risk_agent
         )
@@ -148,6 +196,15 @@ class AgentFactory:
                 Your role is to provide accurate and relevant information on available investment options, 
                 acting as a trusted advisor in portfolio optimization. 
                 You must interpret and analyze financial data to offer valuable insights that help in making investment decisions.
+                Also you are an expert who creates perfectly formatted Markdown reports. 
+                Specializes in consistent number formatting and maintains readability 
+                by treating numbers and their units as single, inseparable elements.
+                    CRITICAL: You must format ALL output in pure Markdown only:
+                    - Use # for main headers
+                    - Use ## for subheaders 
+                    - Use ** for bold numbers and metrics
+                    - NEVER use LaTeX formatting
+                    - NEVER use $ symbols for formatting     
             """,
             llm = self.conf,
             allow_delegation = self.allow_delegation,
@@ -162,12 +219,27 @@ class AgentFactory:
                 stock-price-change:{data['stock-price-change']},
                 discounted-cash-flow:{data['discounted-cash-flow']},
                 historical-market-capitalization:{data['historical-market-capitalization']}
+                Avoid the creation of any Latex format, just focus in
+                create a Markdown report for {company}
+                OUTPUT FORMAT REQUIREMENTS:
+                    1. Use ONLY Markdown syntax
+                    2. Format numbers like: **50 million**, **25%**, **1.2 billion**
+                    3. NEVER use LaTeX or $ symbols
+                    4. Use headers: # for titles, ## for sections
+                    5. Use bullet points with -
             """,
             expected_output = """
                 Based on the analysis of the information provided, 
                 You must offer a clear and concise answer that identifies the best investment opportunities. 
                 Make sure your answer is direct and based on the data analyzed, 
                 providing practical recommendations to optimize the user's investment portfolio.
+                Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
+                Provide a clear Markdown report with:
+                    - Proper headers (#, ##)
+                    - Bold numbers (**number**)
+                    - NO LaTeX formatting
+                    - NO $ symbols
+                    - Clean bullet points
             """,
             agent = investment_agent
         )
@@ -182,6 +254,15 @@ class AgentFactory:
                 Your role is to provide accurate and relevant information about the company's accounting records 
                 and financial situation. You act as a trusted advisor in the interpretation of financial statements 
                 and in the optimization of accounting processes.
+                Also you are an expert who creates perfectly formatted Markdown reports. 
+                Specializes in consistent number formatting and maintains readability 
+                by treating numbers and their units as single, inseparable elements.
+                    CRITICAL: You must format ALL output in pure Markdown only:
+                    - Use # for main headers
+                    - Use ## for subheaders 
+                    - Use ** for bold numbers and metrics
+                    - NEVER use LaTeX formatting
+                    - NEVER use $ symbols for formatting     
             """,
             llm = self.conf,
             allow_delegation = self.allow_delegation,
@@ -196,12 +277,27 @@ class AgentFactory:
                 cash-flow-statement-growth:{data['cash-flow-statement-growth']},
                 balance-sheet-statement-growth:{data['balance-sheet-statement-growth']},
                 income-statement-growth:{data['income-statement-growth']}
+                Avoid the creation of any Latex format, just focus in
+                create a Markdown report for {company}
+                OUTPUT FORMAT REQUIREMENTS:
+                    1. Use ONLY Markdown syntax
+                    2. Format numbers like: **50 million**, **25%**, **1.2 billion**
+                    3. NEVER use LaTeX or $ symbols
+                    4. Use headers: # for titles, ## for sections
+                    5. Use bullet points with -
             """,
             expected_output = """
                 Based on the analysis of the accounting information provided, 
                 you must offer a clear and concise answer that summarizes the current financial situation. 
                 Make sure your answer is direct and based on the data analyzed, 
                 providing practical recommendations to improve accounting efficiency and the accuracy of financial records.
+                Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
+                Provide a clear Markdown report with:
+                    - Proper headers (#, ##)
+                    - Bold numbers (**number**)
+                    - NO LaTeX formatting
+                    - NO $ symbols
+                    - Clean bullet points
             """,
             agent = accounting_agent
         )
@@ -217,6 +313,15 @@ class AgentFactory:
                 acting as a trusted advisor on regulatory and compliance issues. 
                 You must interpret and analyze legal and regulatory documents to provide valuable insights
                 that help ensure compliance and minimize legal risks.
+                Also you are an expert who creates perfectly formatted Markdown reports. 
+                Specializes in consistent number formatting and maintains readability 
+                by treating numbers and their units as single, inseparable elements.
+                    CRITICAL: You must format ALL output in pure Markdown only:
+                    - Use # for main headers
+                    - Use ## for subheaders 
+                    - Use ** for bold numbers and metrics
+                    - NEVER use LaTeX formatting
+                    - NEVER use $ symbols for formatting     
             """,
             llm = self.conf,
             allow_delegation = self.allow_delegation,
@@ -229,13 +334,28 @@ class AgentFactory:
                 ensuring that all applicable regulations are met.
                 Reviwe legal compliance data from this company: {company}:
                 profile:{data['profile']}
+                Avoid the creation of any Latex format, just focus in
+                create a Markdown report for {company}
+                OUTPUT FORMAT REQUIREMENTS:
+                    1. Use ONLY Markdown syntax
+                    2. Format numbers like: **50 million**, **25%**, **1.2 billion**
+                    3. NEVER use LaTeX or $ symbols
+                    4. Use headers: # for titles, ## for sections
+                    5. Use bullet points with -
             """,
             expected_output = """
                 Based on your analysis of the legal information provided, 
                 you should provide a clear and concise response that summarizes the legal and regulatory implications. 
                 Make sure your response is direct and based on the data analyzed, 
                 providing practical recommendations to ensure compliance and mitigate any legal risks identified.
-            """,
+                Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
+                Provide a clear Markdown report with:
+                    - Proper headers (#, ##)
+                    - Bold numbers (**number**)
+                    - NO LaTeX formatting
+                    - NO $ symbols
+                    - Clean bullet points
+                            """,
             agent = legal_agent
         )
 
@@ -248,6 +368,10 @@ class AgentFactory:
             backstory=f'''
             Expert in validating agents like {", ".join(agents_type)} analysis content. 
             Ensures information is relevant, accurate, and properly formatted.
+            Also you are an expert who creates perfectly formatted Markdown reports.
+            Expert in validating and ensuring pure Markdown formatting.
+            NEVER allow LaTeX formatting to pass through.
+            Convert any LaTeX to proper Markdown formatting. 
             ''',
             llm=self.conf
         )
@@ -255,21 +379,28 @@ class AgentFactory:
         qa_task = Task(
             description=f'''
             Review and validate the agents {", ".join(agents_type)} analysis.
-
             Requirements:
-            1. Content must be relevant to the agents {", ".join(agents_type)} analysis
-            2. Analysis must be clear and well-structured
-            3. Remove any redundant or irrelevant information
-            4. Ensure numerical data is properly contextualized
-
-            Return only the high-quality, relevant content.
+            1. Content must be relevant to the agents {", ".join(agents_type)} analysis.
+            2. Analysis must be clear and well-structured.
+            3. Remove any redundant or irrelevant information.
+            4. Ensure numerical data is properly contextualized.
+            5. Format the output strictly in Markdown.
+            FORMATTING REQUIREMENTS:
+            - Use pure Markdown only.
+            - NO LaTeX allowed.
+            - Replace all LaTeX symbols (e.g., $, {{}} etc) with Markdown equivalents.
+            - Replace $ with "USD" in text.
+            - Bold numbers with **.
+            - Use headers (e.g., #, ##) for sections.
+            - Use bullet points or numbered lists for clarity.
             ''',
             expected_output=f'''
             High-quality {", ".join(agents_type)} analysis with:
-            - Relevant information only
-            - Clear structure
-            - Properly formatted numbers
-            - No redundancies
+            - Relevant information only.
+            - Clear structure.
+            - Properly formatted numbers.
+            - No redundancies.
+            - Strictly Markdown formatting with no LaTeX.
             ''',
             agent=qa_agent,
             context=tasks
@@ -277,84 +408,28 @@ class AgentFactory:
         
         return qa_agent, qa_task
 
-    def SummarizeAgent(self, tasks, company):
-        summary_agent = Agent(
-            role='Comprehensive Analysis Synthesizer',
-            goal='''
-            Create clean, readable analysis with MANDATORY formatting rules for Markdown:
-            1. Numbers should be formatted clearly using Markdown bold syntax
-            2. Currency values should be written without $ symbol (e.g., "USD 1.2 billion")
-            3. All numbers and units must be together in bold
-            4. Maintain proper spacing and readability
-            ''',
-            backstory='''
-            Expert analyst who creates perfectly formatted Markdown reports. 
-            Specializes in consistent number formatting and maintains readability 
-            by treating numbers and their units as single, inseparable elements.
-            ''',
-            llm=self.conf,
-            allow_delegation=self.allow_delegation,
-        )
-        
-        summary_task = Task(
-            description=f'''
-            Avoid the creation of any Latex format, just focus in
-            create a Markdown report for {company} following these MANDATORY RULES:
-
-            NUMBER FORMATTING RULES:
-            1. Format large numbers as ONE complete bold unit:
-            CORRECT: "grew to **USD 1.2 trillion** in 2023"
-            WRONG: "grew to **1.2**trillion" or "USD**1.2**trillion"
-
-            2. Standard Formats to Follow:
-            - Trillions: "**USD 1.2 trillion**"
-            - Billions: "**USD 50.5 billion**"
-            - Millions: "**USD 100.3 million**"
-            - Percentages: "**25%**"
-            - Plain numbers: "**1,234**"
-
-            EXAMPLE SENTENCES:
-            - "Market cap increased from **USD 1.2 trillion** to **USD 3.5 trillion**"
-            - "Revenue grew by **25%** to reach **USD 50.5 billion**"
-            - "Stock price rose from **USD 150** to **USD 200**"
-
-            CRITICAL RULES:
-            - Use "USD" instead of "$" for currency
-            - ALWAYS keep number and unit together in the same bold tag
-            - ALWAYS add spaces between bold sections
-            - NEVER use multiple asterisks for a single number
-            - NEVER split formatting between number and unit
-
-            Use proper Markdown headers:
-            # Main Title
-            ## Sections
-            ### Subsections
-            ''',
-            agent=summary_agent,
-            context=tasks,
-            expected_output='A perfectly formatted Markdown report with proper headers and consistent number formatting'
-        )
-        
-        return summary_agent, summary_task
-
-    def create_crew(self, agents, tasks):
+    def create_crew(self, agents, tasks, st_status, agents_qty):
         timing = []
         timing.append(time.time())
         token = []
         self.encoding = encoding_for_model("gpt-4")
         outputs = []
+        count = 0 
         
-        
-        def step_callback(formatted_answer):
+        def step_callback(formatted_answer, st_status=st_status, c_agents = count, agents_qty = agents_qty):
             timing.append(time.time())
             outputs.append(formatted_answer.output)
+            c_agents += 1
+            
+            if c_agents <= agents_qty:
+                st_status.write(formatted_answer.output)
 
             if timing[-1] - timing[-2] < 15:
                 time.sleep(15)
 
             tokens = len(self.encoding.encode(str(formatted_answer.output)))
             token.append(tokens)
-        
+
         crew = Crew(
             agents=agents,
             tasks=tasks,
@@ -364,6 +439,7 @@ class AgentFactory:
         )
         
         return crew, timing, token, outputs
+
 
 
 

@@ -1,8 +1,11 @@
 import os
 from dotenv import load_dotenv
 import streamlit as st
-from IPython.display import Markdown
-
+import asyncio
+import random
+from concurrent.futures import ThreadPoolExecutor
+import time
+from process.utils import export_to_pdf_form
 from process.multi_agents import MultiAgentSystem
 from process.logger import Logger
 
@@ -11,8 +14,80 @@ load_dotenv()
 
 logger = Logger()
 
-# Usage
-def main(user_input):
+FACTS = [
+    "The first credit card was introduced in 1950 by Diners Club",
+    "The NYSE processes over 5 billion trades per day",
+    "The word 'salary' comes from the Latin word for salt, as Roman soldiers were paid in salt",
+    "The first ATM was installed in London in 1967",
+    "The Federal Reserve was founded in 1913",
+    "The longest bull market lasted 11 years, from 2009 to 2020",
+    "The first stock exchange was established in Amsterdam in 1602",
+    "Japan has the world's highest debt-to-GDP ratio, over 230%",
+    "The first mutual fund was created in Belgium in 1822",
+    "Mobile payments first emerged in Finland in 1997",
+    "The global financial system processes $5.4 trillion in daily forex trades",
+    "The first cryptocurrency, Bitcoin, was created in 2009",
+    "The largest banknote ever printed was worth $100,000",
+    r"Less than 10% of the world's money exists as physical cash",
+    "Warren Buffett bought his first stock at age 11",
+    "The term 'bull market' comes from how bulls attack with upward horns",
+    "The first ETF was launched in 1993",
+    "The best-performing stock of all time is Monster Beverage, up over 100,000%",
+    r"90% of day traders lose money",
+    "The first modern mutual fund was created in 1924",
+    r"The S&P 500 has averaged 10% annual returns historically",
+    "The rule of 72 helps estimate investment doubling time",
+    r"Only 20% of actively managed funds beat their benchmark",
+    "The first hedge fund was created in 1949",
+    "Real estate has outperformed stocks in some 30-year periods",
+    "The term 'hedge fund' comes from 'hedging' risk",
+    "Index funds were first introduced by John Bogle in 1975",
+    "Compound interest was called the '8th wonder of the world' by Einstein",
+    "The VIX 'fear index' was introduced in 1993",
+    r"The largest single-day stock market drop was 22.6% in 1987",
+    "Most financial models assume normal distribution of returns",
+    "Value at Risk (VaR) was developed by JP Morgan in the 1990s",
+    "Systematic risk cannot be diversified away",
+    "The first credit default swap was created in 1994",
+    "Beta measures a stock's volatility compared to the market",
+    "Modern Portfolio Theory was introduced in 1952",
+    "Options trading dates back to ancient Greece",
+    "The Black-Scholes model revolutionized options pricing",
+    "Correlation between assets tends to increase during crises",
+    "Risk parity strategies were first used in the 1990s",
+    "The first risk management department was created in 1970",
+    "Stress testing became mandatory after the 2008 crisis",
+    "Double-entry bookkeeping was invented in 1494",
+    "GAAP was first established in 1939",
+    "The world's first accountants worked in ancient Mesopotamia",
+    r"The Big Four accounting firms audit 80% of US public companies",
+    "Accounting is called the 'language of business'",
+    "The first CPA exam was administered in 1896",
+    "IFRS is used in over 140 countries",
+    "The word 'audit' comes from Latin 'audire' meaning 'to hear'",
+    "Luca Pacioli is known as the father of accounting",
+    "The first digital calculator was created for accounting",
+    "Accounting scandals led to the creation of Sarbanes-Oxley",
+    "The first accounting organization was formed in Venice in 1581",
+    "Blockchain is revolutionizing accounting practices",
+    "The first accounting software was released in 1978",
+    "The oldest written law code is the Code of Ur-Nammu",
+    "The term 'corporate veil' was first used in 1809",
+    r"Delaware is home to 66% of Fortune 500 companies",
+    "The SEC was created in response to the 1929 crash",
+    "The first patent law was enacted in Venice in 1474",
+    "The longest court case lasted 60 years in India",
+    "Corporate personhood was established in 1886",
+    "The first commercial arbitration dated back to ancient Egypt",
+    "International law began with the Peace of Westphalia",
+    "The first trademark was registered in 1870",
+    "The UCC has been adopted by all 50 US states",
+    "The first copyright law was the Statute of Anne in 1710",
+    "Legal precedent comes from the Latin 'stare decisis'",
+    "Alternative dispute resolution began in ancient China"
+]
+
+def main(user_input, st_status):
     llm_endpoint = {
         "endpoint": os.getenv("AZURE_OPENAI_ENDPOINT"),
         "model": {
@@ -34,10 +109,11 @@ def main(user_input):
     )
  
     result = multi_agent_system.process_request(
-        user_input = user_input
+        user_input = user_input,
+        st_status = st_status
     )
 
-    st.markdown(result, unsafe_allow_html=True)
+    return result
 
 if __name__ == "__main__":
 
@@ -59,12 +135,31 @@ if __name__ == "__main__":
     """)
 
     with st.form("my_form"):
-        
         text = st.text_input(
-            label = "What kind of analysis and which company would you like to check? Please write it down here",
-            placeholder = "I want a general evaluation on Apple"
+            label="What kind of analysis and which company would you like to check? Please write it down here",
+            placeholder="I want a general evaluation on Apple"
         )
+        
         submitted = st.form_submit_button("Submit")
         
         if submitted:
-            main(user_input=text)
+            with st.status("Processing your request...", expanded=True) as status:
+                st.session_state.result = main(text, status)
+                status.update(
+                    label="Completed!",
+                    expanded=False,
+                    state="complete"
+                )
+            
+            st.markdown(st.session_state.result, unsafe_allow_html=True)
+
+    if "result" in st.session_state: 
+        export_to_pdf_form(st.session_state.result)
+
+    if "pdf_bytes" in st.session_state:
+        st.download_button(
+            label="Descargar PDF",
+            data=st.session_state.pdf_bytes,
+            file_name=st.session_state.file_name,
+            mime='application/pdf'
+        )
