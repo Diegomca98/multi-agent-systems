@@ -5,7 +5,7 @@ import asyncio
 import random
 from concurrent.futures import ThreadPoolExecutor
 import time
-from process.utils import export_to_pdf_form
+
 from process.multi_agents import MultiAgentSystem
 from process.logger import Logger
 
@@ -135,31 +135,21 @@ if __name__ == "__main__":
     """)
 
     with st.form("my_form"):
-        text = st.text_input(
-            label="What kind of analysis and which company would you like to check? Please write it down here",
-            placeholder="I want a general evaluation on Apple"
-        )
         
+        text = st.text_input(
+            label = "What kind of analysis and which company would you like to check? Please write it down here",
+            placeholder = "I want a general evaluation on Apple"
+        )
+
         submitted = st.form_submit_button("Submit")
         
         if submitted:
             with st.status("Processing your request...", expanded=True) as status:
-                st.session_state.result = main(text, status)
+                result = main(text, status)
                 status.update(
-                    label="Completed!",
-                    expanded=False,
-                    state="complete"
+                    label = "Completed!",
+                    expanded = False,
+                    state = "complete"
                 )
             
-            st.markdown(st.session_state.result, unsafe_allow_html=True)
-
-    if "result" in st.session_state: 
-        export_to_pdf_form(st.session_state.result)
-
-    if "pdf_bytes" in st.session_state:
-        st.download_button(
-            label="Descargar PDF",
-            data=st.session_state.pdf_bytes,
-            file_name=st.session_state.file_name,
-            mime='application/pdf'
-        )
+            st.markdown(result, unsafe_allow_html=True)

@@ -1,16 +1,11 @@
 from openai import AzureOpenAI
 import streamlit as st
-import os
-import time
-from datetime import datetime
-from pathlib import Path
-from markdown_pdf import MarkdownPdf
-from markdown_pdf import Section
+
 from process.agents import AgentFactory
 from process.api_call import FinancialModelingPrepAPI
 from process.llm_router import LLMRouter
 from process.api_response_preprocessing import PreprocessResponse
-from .utils import metrics_data
+from .utils import print_metrics
 from process.logger import Logger
 
 logger = Logger()
@@ -116,7 +111,7 @@ class MultiAgentSystem:
             final_result = result_crew.kickoff()
 
             executions = list(selected_agents) + ["QA Agent"]
-            metrics_data(times, token, outputs, executions, result_crew)
+            print_metrics(times, token, outputs, executions, result_crew)
             
             return final_result
 

@@ -379,28 +379,29 @@ class AgentFactory:
         qa_task = Task(
             description=f'''
             Review and validate the agents {", ".join(agents_type)} analysis.
+
             Requirements:
-            1. Content must be relevant to the agents {", ".join(agents_type)} analysis.
-            2. Analysis must be clear and well-structured.
-            3. Remove any redundant or irrelevant information.
-            4. Ensure numerical data is properly contextualized.
-            5. Format the output strictly in Markdown.
+            1. Content must be relevant to the agents {", ".join(agents_type)} analysis
+            2. Analysis must be clear and well-structured
+            3. Remove any redundant or irrelevant information
+            4. Ensure numerical data is properly contextualized
+
+            Return only the high-quality, relevant content.
+            Avoid the creation of any Latex format, just focus in
+            create a Markdown report
             FORMATTING REQUIREMENTS:
-            - Use pure Markdown only.
-            - NO LaTeX allowed.
-            - Replace all LaTeX symbols (e.g., $, {{}} etc) with Markdown equivalents.
-            - Replace $ with "USD" in text.
-            - Bold numbers with **.
-            - Use headers (e.g., #, ##) for sections.
-            - Use bullet points or numbered lists for clarity.
+            - Pure Markdown only
+            - NO LaTeX allowed
+            - Replace $ with "USD" in text
+            - Bold numbers with **
             ''',
             expected_output=f'''
             High-quality {", ".join(agents_type)} analysis with:
-            - Relevant information only.
-            - Clear structure.
-            - Properly formatted numbers.
-            - No redundancies.
-            - Strictly Markdown formatting with no LaTeX.
+            - Relevant information only
+            - Clear structure
+            - Properly formatted numbers
+            - No redundancies
+            Make sure the report is a perfectly formatted Markdown with proper headers and consistent number formatting
             ''',
             agent=qa_agent,
             context=tasks

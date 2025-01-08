@@ -127,9 +127,8 @@ class PreprocessResponse:
             try:
                 for endpoint in to_clean[agent]:
                     for key in to_clean[agent][endpoint]:
-                        for api_list in range(len(api_responses[endpoint])):
-                            del api_responses[endpoint][api_list][key]
+                        del api_responses[endpoint][0][key]
             except KeyError:
                 pass
-
+                    
         return api_responses
